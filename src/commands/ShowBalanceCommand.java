@@ -16,9 +16,9 @@ public class ShowBalanceCommand implements Command {
         balance = 0.0;
         for (Transaction transaction : BankServer.getInstance().getTransactionHistory()) {
             if (transaction.isSuccessful()) {
-                if (transaction.getToAccount().equals(account)) {
+                if (transaction.getToAccount().equals(account) && transaction.isCredit()) {
                     balance += transaction.getAmount();
-                } else if (transaction.getFromAccount().equals(account)) {
+                } else if (transaction.getFromAccount().equals(account) && !transaction.isCredit()) {
                     balance -= transaction.getAmount();
                 }
             }
@@ -26,5 +26,4 @@ public class ShowBalanceCommand implements Command {
         System.out.println("Balance for account " + account + ": " + balance);
         return balance;
     }
-
 }

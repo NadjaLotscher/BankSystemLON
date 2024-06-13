@@ -5,12 +5,14 @@ public class Transaction {
     private String fromAccount;
     private String toAccount;
     private boolean successful;
+    private boolean isCredit;
 
-    public Transaction(double amount, String fromAccount, String toAccount, boolean successful) {
+    public Transaction(double amount, String fromAccount, String toAccount, boolean successful, boolean isCredit) {
         this.amount = amount;
         this.fromAccount = fromAccount;
         this.toAccount = toAccount;
         this.successful = successful;
+        this.isCredit = isCredit;
     }
 
     public double getAmount() {
@@ -28,4 +30,6 @@ public class Transaction {
     public boolean isSuccessful() {
         return successful;
     }
+
+    public boolean isCredit() {return isCredit;}
 }
