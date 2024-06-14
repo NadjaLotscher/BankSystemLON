@@ -15,6 +15,7 @@ public class SendMoneyCommand implements Command {
         this.toAccount = toAccount;
     }
 
+    // This method is responsible for executing the command (sending money from one account to another)
     @Override
     public double execute() {
         // Perform validation

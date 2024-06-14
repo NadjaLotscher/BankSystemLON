@@ -11,6 +11,7 @@ public class ShowBalanceCommand implements Command {
         this.account = account;
     }
 
+    // This method is responsible for executing the command (showing the balance of an account)
     @Override
     public double execute() {
         balance = 0.0;

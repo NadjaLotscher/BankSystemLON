@@ -14,6 +14,7 @@ public class BankServer {
         addTestTransactions();
     }
 
+    // Singleton pattern
     public static synchronized BankServer getInstance() {
         if (instance == null) {
             instance = new BankServer();
@@ -21,6 +22,7 @@ public class BankServer {
         return instance;
     }
 
+    // Transaction history
     public LinkedList<Transaction> getTransactionHistory() {
         return transactionHistory;
     }
@@ -29,6 +31,7 @@ public class BankServer {
         transactionHistory.add(transaction);
     }
 
+    // Add test transactions
     private void addTestTransactions() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         try {

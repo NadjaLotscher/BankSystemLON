@@ -14,8 +14,9 @@ public class TransactionHistoryCommand implements Command {
         this.accountId = accountId;
     }
 
+    // This method is responsible for executing the command (showing the transaction history of an account)
     @Override
-    public double execute() {
+    public double execute() { // shows transaction history on server side
         List<Transaction> history = new ArrayList<>();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         StringBuilder historyString = new StringBuilder();
@@ -38,7 +39,7 @@ public class TransactionHistoryCommand implements Command {
         return 0;
     }
 
-    public String getHistory() {
+    public String getHistory() { // shows transaction history on client side
         List<Transaction> history = new ArrayList<>();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         StringBuilder historyString = new StringBuilder();

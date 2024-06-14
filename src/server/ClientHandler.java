@@ -16,6 +16,7 @@ public class ClientHandler extends Thread {
         this.clientSocket = socket;
     }
 
+    // Handles client requests
     @Override
     public void run() {
         try {
@@ -43,6 +44,7 @@ public class ClientHandler extends Thread {
         }
     }
 
+    // initializes client account with some money
     private void initializeClientAccount(String clientId) {
         double initialBalance = 1000.0; // Initial amount to be credited
         if (!Validator.validateAccountExists(clientId)) {
@@ -55,6 +57,7 @@ public class ClientHandler extends Thread {
         System.out.println("Initialized account " + clientId + " with balance: " + initialBalance);
     }
 
+    // handles input from client
     private void handleInput(String input) {
         String[] parts = input.split(" ");
         String command = parts[0];
@@ -83,6 +86,7 @@ public class ClientHandler extends Thread {
         }
     }
 
+    // handles action command
     private void handleAction(String[] parts) {
         if (parts.length < 2) {
             out.println("Invalid ACTION command");
@@ -107,6 +111,7 @@ public class ClientHandler extends Thread {
         }
     }
 
+    // send money
     private void handleSend(String[] parts) {
         if (parts.length < 3) {
             out.println("Invalid SEND command");
@@ -132,6 +137,7 @@ public class ClientHandler extends Thread {
         out.println("Choose action (1: Send Money, 2: Check Balance, 3: Transaction History):");
     }
 
+    // handles requests
     private void handleRequest(String[] parts) {
         if (parts.length < 3) {
             out.println("Invalid REQUEST command");
@@ -144,6 +150,7 @@ public class ClientHandler extends Thread {
         out.println("Choose action (1: Send Money, 2: Check Balance, 3: Transaction History):");
     }
 
+    // shows balance
     private void handleBalance() {
         System.out.println("Checking balance for: " + clientId);
         Command showBalanceCommand = new ShowBalanceCommand(clientId);
@@ -152,6 +159,7 @@ public class ClientHandler extends Thread {
         out.println("Choose action (1: Send Money, 2: Check Balance, 3: Transaction History):");
     }
 
+    // shows transaction history
     private void handleHistory(String[] parts) {
         System.out.println("Fetching transaction history for: " + clientId);
         TransactionHistoryCommand transactionHistoryCommand = new TransactionHistoryCommand(clientId);
@@ -162,6 +170,7 @@ public class ClientHandler extends Thread {
         out.println("Choose action (1: Send Money, 2: Check Balance, 3: Transaction History):");
     }
 
+    // reads a line from the input stream
     private String readLine() {
         try {
             return in.readLine();

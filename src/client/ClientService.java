@@ -16,6 +16,7 @@ public class ClientService {
         this.buffin = buffin;
     }
 
+    // This method is responsible for the interaction between the client and the server
     public void startInteraction() throws IOException {
         System.out.println(buffin.readLine());  // Initial prompt from the server to enter ID
 
@@ -47,6 +48,7 @@ public class ClientService {
         }
     }
 
+    // This method is responsible for getting the amount from the user
     private String getAmount() {
         System.out.print("Enter amount: ");
         return scanner.nextLine();

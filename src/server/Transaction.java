@@ -19,7 +19,7 @@ public class Transaction {
         if (timestamp != null) {
             this.timestamp = timestamp;
         } else {
-            this.timestamp = new Date(); // Set the current date and time
+            this.timestamp = new Date(); // Set the current date and time if no date is passed
         }
     }
 
