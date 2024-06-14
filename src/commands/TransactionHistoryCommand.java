@@ -18,19 +18,45 @@ public class TransactionHistoryCommand implements Command {
     public double execute() {
         List<Transaction> history = new ArrayList<>();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        StringBuilder historyString = new StringBuilder();
+
         for (Transaction transaction : BankServer.getInstance().getTransactionHistory()) {
             if (transaction.getFromAccount().equals(accountId) || transaction.getToAccount().equals(accountId)) {
                 history.add(transaction);
             }
         }
 
-        System.out.println("Transaction history for account " + accountId + ":");
+        historyString.append("Transaction history for account ").append(accountId).append(":\n");
         for (Transaction transaction : history) {
-            System.out.println(sdf.format(transaction.getTimestamp()) + " - "
-                    + (transaction.isCredit() ? "Credit: " : "Debit: ")
-                    + transaction.getAmount() + " from " + transaction.getFromAccount()
-                    + " to " + transaction.getToAccount());
+            historyString.append(sdf.format(transaction.getTimestamp())).append(" - ")
+                    .append(transaction.isCredit() ? "Credit: " : "Debit: ")
+                    .append(transaction.getAmount()).append(" from ").append(transaction.getFromAccount())
+                    .append(" to ").append(transaction.getToAccount()).append("\n");
         }
+
+        System.out.println(historyString.toString());
         return 0;
+    }
+
+    public String getHistory() {
+        List<Transaction> history = new ArrayList<>();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        StringBuilder historyString = new StringBuilder();
+
+        for (Transaction transaction : BankServer.getInstance().getTransactionHistory()) {
+            if (transaction.getFromAccount().equals(accountId) || transaction.getToAccount().equals(accountId)) {
+                history.add(transaction);
+            }
+        }
+
+        historyString.append("Transaction history for account ").append(accountId).append(":\n");
+        for (Transaction transaction : history) {
+            historyString.append(sdf.format(transaction.getTimestamp())).append(" - ")
+                    .append(transaction.isCredit() ? "Credit: " : "Debit: ")
+                    .append(transaction.getAmount()).append(" from ").append(transaction.getFromAccount())
+                    .append(" to ").append(transaction.getToAccount()).append("\n");
+        }
+
+        return historyString.toString();
     }
 }

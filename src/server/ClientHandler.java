@@ -154,8 +154,10 @@ public class ClientHandler extends Thread {
 
     private void handleHistory(String[] parts) {
         System.out.println("Fetching transaction history for: " + clientId);
-        Command transactionHistoryCommand = new TransactionHistoryCommand(clientId);
+        TransactionHistoryCommand transactionHistoryCommand = new TransactionHistoryCommand(clientId);
         transactionHistoryCommand.execute();
+        String history = transactionHistoryCommand.getHistory();
+        out.println(history);
         out.println("Transaction history fetched successfully.");
         out.println("Choose action (1: Send Money, 2: Check Balance, 3: Transaction History):");
     }
