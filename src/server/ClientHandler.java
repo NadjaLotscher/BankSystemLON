@@ -26,8 +26,11 @@ public class ClientHandler extends Thread {
             clientId = in.readLine();
             System.out.println("Received client ID: " + clientId);
 
+            // Initialize client account with some money
+            initializeClientAccount(clientId);
+
             // After receiving the client ID, prompt for action
-            out.println("Choose action (1: Send Money, 2: Check Balance):");
+            out.println("Choose action (1: Send Money, 2: Check Balance, 3: Transaction History):");
 
             while (true) {
                 String input = in.readLine();
@@ -38,6 +41,18 @@ public class ClientHandler extends Thread {
         } catch (Exception e) {
             System.out.println("Error handling client: " + e.getMessage());
         }
+    }
+
+    private void initializeClientAccount(String clientId) {
+        double initialBalance = 1000.0; // Initial amount to be credited
+        if (!Validator.validateAccountExists(clientId)) {
+            System.out.println("Invalid account ID.");
+            return;
+        }
+
+        Transaction initialTransaction = new Transaction(initialBalance, "BANK", clientId, true, true, null);
+        BankServer.getInstance().addTransaction(initialTransaction);
+        System.out.println("Initialized account " + clientId + " with balance: " + initialBalance);
     }
 
     private void handleInput(String input) {
@@ -59,16 +74,19 @@ public class ClientHandler extends Thread {
             case "BALANCE":
                 handleBalance();
                 break;
+            case "HISTORY":
+                handleHistory(parts);
+                break;
             default:
                 out.println("Unknown command: " + command);
-                out.println("Choose action (1: Send Money, 2: Check Balance):");
+                out.println("Choose action (1: Send Money, 2: Check Balance, 3: Transaction History):");
         }
     }
 
     private void handleAction(String[] parts) {
         if (parts.length < 2) {
             out.println("Invalid ACTION command");
-            out.println("Choose action (1: Send Money, 2: Check Balance):");
+            out.println("Choose action (1: Send Money, 2: Check Balance, 3: Transaction History):");
             return;
         }
         String action = parts[1];
@@ -80,9 +98,12 @@ public class ClientHandler extends Thread {
             case "2":
                 handleBalance();
                 break;
+            case "3":
+                handleHistory(new String[]{"HISTORY"});
+                break;
             default:
                 out.println("Unknown ACTION: " + action);
-                out.println("Choose action (1: Send Money, 2: Check Balance):");
+                out.println("Choose action (1: Send Money, 2: Check Balance, 3: Transaction History):");
         }
     }
 
@@ -92,12 +113,23 @@ public class ClientHandler extends Thread {
             return;
         }
         String recipientId = parts[1];
-        double amount = Double.parseDouble(parts[2]);
+        double amount;
+        try {
+            amount = Double.parseDouble(parts[2]);
+        } catch (NumberFormatException e) {
+            out.println("Invalid amount format.");
+            return;
+        }
+
         System.out.println("Sending money: " + amount + " from " + clientId + " to " + recipientId);
         Command sendMoneyCommand = new SendMoneyCommand(amount, clientId, recipientId);
-        sendMoneyCommand.execute();
-        out.println("Money sent successfully.");
-        out.println("Choose action (1: Send Money, 2: Check Balance):");
+        double result = sendMoneyCommand.execute();
+        if (result == -1) {
+            out.println("Transaction failed. Please check the error message.");
+        } else {
+            out.println("Money sent successfully.");
+        }
+        out.println("Choose action (1: Send Money, 2: Check Balance, 3: Transaction History):");
     }
 
     private void handleRequest(String[] parts) {
@@ -109,7 +141,7 @@ public class ClientHandler extends Thread {
         double amount = Double.parseDouble(parts[2]);
         // Implement similar to SendMoneyCommand for handling requests
         out.println("Request processed successfully.");
-        out.println("Choose action (1: Send Money, 2: Check Balance):");
+        out.println("Choose action (1: Send Money, 2: Check Balance, 3: Transaction History):");
     }
 
     private void handleBalance() {
@@ -117,6 +149,22 @@ public class ClientHandler extends Thread {
         Command showBalanceCommand = new ShowBalanceCommand(clientId);
         double balance = showBalanceCommand.execute();
         out.println("Balance for account " + clientId + ": " + balance);
-        out.println("Choose action (1: Send Money, 2: Check Balance):");
+        out.println("Choose action (1: Send Money, 2: Check Balance, 3: Transaction History):");
+    }
+
+    private void handleHistory(String[] parts) {
+        System.out.println("Fetching transaction history for: " + clientId);
+        Command transactionHistoryCommand = new TransactionHistoryCommand(clientId);
+        transactionHistoryCommand.execute();
+        out.println("Transaction history fetched successfully.");
+        out.println("Choose action (1: Send Money, 2: Check Balance, 3: Transaction History):");
+    }
+
+    private String readLine() {
+        try {
+            return in.readLine();
+        } catch (Exception e) {
+            return null;
+        }
     }
 }

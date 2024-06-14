@@ -1,6 +1,9 @@
 package server;
 
 import java.util.LinkedList;
+import java.util.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 public class BankServer {
     private static BankServer instance;
@@ -8,6 +11,7 @@ public class BankServer {
 
     private BankServer() {
         transactionHistory = new LinkedList<>();
+        addTestTransactions();
     }
 
     public static synchronized BankServer getInstance() {
@@ -23,5 +27,23 @@ public class BankServer {
 
     public void addTransaction(Transaction transaction) {
         transactionHistory.add(transaction);
+    }
+
+    private void addTestTransactions() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            // Add test transactions with parsed dates
+            Transaction t1 = new Transaction(100, "1", "2", true, false, sdf.parse("2023-06-10"));
+            Transaction t2 = new Transaction(200, "2", "1", true, true, sdf.parse("2023-06-11"));
+            Transaction t3 = new Transaction(300, "1", "3", true, false, sdf.parse("2023-06-12"));
+            Transaction t4 = new Transaction(400, "3", "1", true, true, sdf.parse("2023-06-13"));
+
+            transactionHistory.add(t1);
+            transactionHistory.add(t2);
+            transactionHistory.add(t3);
+            transactionHistory.add(t4);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 }
